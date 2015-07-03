@@ -61,6 +61,6 @@ public class CoordinatesOfGoal : MonoBehaviour {
 
 		print ("change floorFlag");
 
-		ctl.floorFlg = NONE;
+//		ctl.floorFlg = NONE;
 	}
 }
