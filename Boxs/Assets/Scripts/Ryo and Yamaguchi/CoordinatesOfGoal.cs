@@ -51,6 +51,7 @@ public class CoordinatesOfGoal : MonoBehaviour {
 			}
 			else if(c.gameObject.tag == "Spling"){
 				ctl.floorFlg = SPLING;
+	//			c.gameObject.tag = "CheckOut";
 			}
 			//********************************************* 0620 yamaguchi finish
 			
@@ -61,6 +62,7 @@ public class CoordinatesOfGoal : MonoBehaviour {
 
 		print ("change floorFlag");
 
-//		ctl.floorFlg = NONE;
+
+		ctl.floorFlg = NONE;
 	}
 }
