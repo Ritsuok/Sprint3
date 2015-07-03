@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 9d3818098c735564b95ad6605f41d916
+timeCreated: 1434973775
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - turnCanvas: {fileID: 141834, guid: 9e1a5c2f55c277647949864fe9cff305, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
