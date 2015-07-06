@@ -9,6 +9,11 @@ public class StartBtn : MonoBehaviour {
 	private startCubeAnim startcubeanim;
 
 	public GameObject retryBtn;
+	public GameObject confirmPanel;
+	public GameObject memoryObj;
+	private Memorize memorize;
+	//public GameObject retryConfirmBtn;
+	//public GameObject cancelBtn;
 	
 	// Use this for initialization
 	void Start () {
@@ -17,10 +22,14 @@ public class StartBtn : MonoBehaviour {
 		playercontroll = playerObj.GetComponent<PlayerControll>();
 
 		//retryBtn = GameObject.Find ("ButtonRetry");
+		confirmPanel.SetActive (false);
 		retryBtn.SetActive (false);
 
 		startCube = GameObject.Find ("StartCube");
 		startcubeanim = startCube.GetComponent<startCubeAnim> ();
+
+		memorize = memoryObj.GetComponent<Memorize> ();
+		memorize.fMemoryStageName ();
 		
 	}
 	
@@ -33,7 +42,7 @@ public class StartBtn : MonoBehaviour {
 		retryBtn.SetActive (true);
 		gameObject.SetActive (false);
 		playercontroll.fStartButton ();
-		playercontroll.fNextMove();
+		//playercontroll.fNextMove();
 
 		startcubeanim.fChangeGreen ();
 
