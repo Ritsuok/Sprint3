@@ -200,8 +200,8 @@ public class MainKawashima : MonoBehaviour {
 		if (Input.GetMouseButtonDown(0)) {
 			//timer1 = Time.deltaTime;
 			timer1 = System.DateTime.Now.Ticks;
-			Debug.Log ("GetMouseButtonDown(0)" + timer1);
-			Debug.Log("Input.mousePosition.y = " + Input.mousePosition.y);
+			//Debug.Log ("GetMouseButtonDown(0)" + timer1);
+			//Debug.Log("Input.mousePosition.y = " + Input.mousePosition.y);
 			//Debug.Log("UIPanel transform.position = " + uiPanel.transform.position);
 			//Debug.Log("UIPanel localScaleY = " + uiPanel.transform.localScale.y);
 			//Debug.Log("UIPanel sizeDelta.y = " + uiPannelHeight);
@@ -209,10 +209,10 @@ public class MainKawashima : MonoBehaviour {
 		if (Input.GetMouseButtonUp(0)) {
 			//timer2 = Time.deltaTime;
 			timer2 = System.DateTime.Now.Ticks;
-			Debug.Log ("GetMouseButtonUp(0)" + timer2);
+			//Debug.Log ("GetMouseButtonUp(0)" + timer2);
 			timer3 = timer2 - timer1;
-			Debug.Log("timer1 = " + timer1);
-			Debug.Log("(timer2-timer1) = " + timer3);
+			//Debug.Log("timer1 = " + timer1);
+			//Debug.Log("(timer2-timer1) = " + timer3);
 /*
 			Vector2 worldPoint2d = camera.ScreenToWorldPoint(Input.mousePosition);
 			Collider2D collider2D = Physics2D.OverlapPoint(worldPoint2d);
@@ -228,7 +228,7 @@ public class MainKawashima : MonoBehaviour {
 
 //			if( timer3 < 3500000 && Input.mousePosition.y >= uiPannelHeight){
 			if( timer3 < 3500000 && !isUi){
-				print ("RaycastStarted");
+				//print ("RaycastStarted");
 				// メインカメラからクリックしたポジションに向かってRayを撃つ。
 				Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 				//Vector3 firstOrigin = ray.origin;
@@ -238,18 +238,18 @@ public class MainKawashima : MonoBehaviour {
 				//StartCoroutine("hogehoge");
 
 				// Bit shift the index of the layer (8) to get a bit mask
-				int layerMask = 1 << 8;
+				//int layerMask = 1 << 7;
 				
 				// This would cast rays only against colliders in layer 8.
 				// But instead we want to collide against everything except layer 8. The ~ operator does this, it inverts a bitmask.
 
-				layerMask = ~layerMask;
+				//layerMask = ~layerMask;
 
 				
 				RaycastHit hit = new RaycastHit();
 				MeshRenderer hitMeshRenderer;
 
-				if (Physics.Raycast(ray, out hit, distance, layerMask)) {
+				if (Physics.Raycast(ray, out hit, distance, ~(1 << LayerMask.NameToLayer("Player")))) {
 
 					//sound
 					Sounds.SEcursor(); // < 0629 igarashi add
@@ -283,8 +283,8 @@ public class MainKawashima : MonoBehaviour {
 
 	}
 	public void fDrop(int index){
-		print ("start fDrop index = " + index);
-		print ("listSelectableCubes[index] = " + listSelectableCubes[index].name);
+		//print ("start fDrop index = " + index);
+		//print ("listSelectableCubes[index] = " + listSelectableCubes[index].name);
 		if (isSelected == false) {
 			return;
 		}

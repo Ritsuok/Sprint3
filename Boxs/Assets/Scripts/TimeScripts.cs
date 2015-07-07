@@ -20,12 +20,17 @@ public class TimeScripts : MonoBehaviour {
 	void Start () {	
 		//gameOverobj.SetActive (false);
 		//初期値60を表示
-		//float型からint型へCastし、String型に変換して表示
-		GetComponent<Text>().text = ((int)time).ToString();
-		//time = RadialTimerScript.stageTimeLimit;
 		circleObj = GameObject.Find ("CircleGageDummy");
 		radicaltimer = circleObj.GetComponent<RadialTimerScript> ();
 		time = radicaltimer.stageTimeLimit;
+		//float型からint型へCastし、String型に変換して表示
+		//GetComponent<Text>().text = ((int)time).ToString();
+		GetComponent<Text> ().text = 
+			((int)time / 60).ToString ("00") + ":" + 
+				((int)time % 60).ToString ("00") + ":" + 
+				(Mathf.Floor (time % 1 * 100)).ToString ("00") + " SEC";
+		//time = RadialTimerScript.stageTimeLimit;
+
 	}
 	
 
