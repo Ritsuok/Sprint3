@@ -13,6 +13,7 @@ GameObject:
   - 114: {fileID: 11453104}
   - 65: {fileID: 6540566}
   - 54: {fileID: 5473088}
+  - 114: {fileID: 11439024}
   m_Layer: 0
   m_Name: CubeR
   m_TagString: TurnR
@@ -151,6 +152,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 2.00000048, z: 1.99999964}
   m_Center: {x: -5.96046448e-08, y: -1.19209268e-07, z: -2.96461532e-21}
+--- !u!114 &11439024
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 129614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d3818098c735564b95ad6605f41d916, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turnCanvas: {fileID: 141834, guid: 9e1a5c2f55c277647949864fe9cff305, type: 2}
 --- !u!114 &11453104
 MonoBehaviour:
   m_ObjectHideFlags: 1

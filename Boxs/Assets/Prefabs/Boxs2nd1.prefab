@@ -73,7 +73,7 @@ GameObject:
   - 65: {fileID: 6517610}
   m_Layer: 0
   m_Name: SensorForAvoidBlock
-  m_TagString: Untagged
+  m_TagString: SensorForAvoidBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -169,7 +169,7 @@ GameObject:
   - 114: {fileID: 11490344}
   m_Layer: 0
   m_Name: SensorFrontUP 1
-  m_TagString: Untagged
+  m_TagString: SensorFrontUP
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -603,7 +603,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 120414}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2, y: .569999993, z: -1}
+  m_LocalPosition: {x: 2, y: 1.57000005, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 424070}
@@ -1084,7 +1084,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 120414}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: .00999999978
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 0
@@ -1099,7 +1099,7 @@ BoxCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 109242}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: .600000024, y: .100000001, z: .600000024}
@@ -1138,7 +1138,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: .200000003, y: .200000003, z: .200000003}
+  m_Size: {x: .00999999978, y: .00999999978, z: .00999999978}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &6584084
 BoxCollider:
@@ -1192,6 +1192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c37b7e6873a566479e9f73710ea5813, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HitEffect: {fileID: 149412, guid: e134776b5be1c274cacd7384dd6b7f33, type: 2}
   speed: .00999999978
   frontFlg: 0
   downFlg: 1
@@ -1199,6 +1200,7 @@ MonoBehaviour:
   floorFlg: 1
   cnt: 10
   startFlg: 0
+  methodName: aho
 --- !u!114 &11487344
 MonoBehaviour:
   m_ObjectHideFlags: 1
