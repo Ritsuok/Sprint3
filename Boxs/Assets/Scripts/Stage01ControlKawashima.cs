@@ -75,6 +75,26 @@ public class Stage01ControlKawashima : MonoBehaviour {
 		dropcubeB= bombBtn.GetComponent<DropCubBtnKawashima> ();
 //********************************************* 0629 igarashi end
 	
+		if (cubeSpling <=0) {
+			dropcubeJ.isSplingNoMore = true;
+			mainkawashima.isSelected = true;
+		}
+		if (cubeStraight <=0) {
+			dropcubeS.isStraightNoMore = true;
+			mainkawashima.isSelected = true;
+		}
+		if (cubeLeft <=0) {
+			dropcubeL.isLeftNoMore = true;
+			mainkawashima.isSelected = true;
+		}
+		if (cubeRight <=0) {
+			dropcubeR.isRightNoMore = true;
+			mainkawashima.isSelected = true;
+		}
+		if (cubeBomb <=0) {
+			dropcubeB.isBombNoMore = true;
+			mainkawashima.isSelected = true;
+		}
 	}
 	
 	// Update is called once per frame
@@ -85,8 +105,10 @@ public class Stage01ControlKawashima : MonoBehaviour {
 		if (mainkawashima.isSelected == false){
 			return;
 		}
-		
-		cubeSpling --;
+		if (cubeSpling > 0) {
+			cubeSpling --;
+		}
+
 		splingTxt.text = cubeSpling.ToString ();
 		
 		if (cubeSpling <= 0) {
@@ -98,8 +120,9 @@ public class Stage01ControlKawashima : MonoBehaviour {
 		if (mainkawashima.isSelected == false){
 			return;
 		}
-
-		cubeStraight --;
+		if (cubeStraight > 0) {
+			cubeStraight --;
+		}
 		straightTxt.text = cubeStraight.ToString ();
 
 		if (cubeStraight <= 0) {
@@ -111,8 +134,9 @@ public class Stage01ControlKawashima : MonoBehaviour {
 		if (mainkawashima.isSelected == false){
 			return;
 		}
-
-		cubeLeft --;
+		if (cubeLeft > 0) {
+			cubeLeft --;
+		}
 		leftTxt.text = cubeLeft.ToString ();
 
 		if (cubeLeft <= 0) {
@@ -124,8 +148,9 @@ public class Stage01ControlKawashima : MonoBehaviour {
 		if (mainkawashima.isSelected == false){
 			return;
 		}
-
-		cubeRight --;
+		if (cubeRight > 0) {
+			cubeRight --;
+		}
 		rightTxt.text = cubeRight.ToString ();
 
 		if (cubeRight <= 0) {
@@ -140,12 +165,13 @@ public class Stage01ControlKawashima : MonoBehaviour {
 		if (mainkawashima.isSelected == false){
 			return;
 		}
-
-		cubeBomb --;
+		if (cubeBomb > 0) {
+			cubeBomb --;
+		}
 		bombTxt.text = cubeBomb.ToString ();
 		
 		if (cubeBomb <= 0) {
-			dropcubeR.isRightNoMore = true;
+			dropcubeR.isBombNoMore = true;
 			return;
 		}
 	}
