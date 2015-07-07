@@ -237,11 +237,11 @@ public class MainKawashima : MonoBehaviour {
 				//Invoke("hogehoge",0.01f);
 				//StartCoroutine("hogehoge");
 
-				// Bit shift the index of the layer (6) to get a bit mask
-				int layerMask = 1 << 7;
+				// Bit shift the index of the layer (8) to get a bit mask
+				int layerMask = 1 << 8;
 				
-				// This would cast rays only against colliders in layer 6.
-				// But instead we want to collide against everything except layer 6. The ~ operator does this, it inverts a bitmask.
+				// This would cast rays only against colliders in layer 8.
+				// But instead we want to collide against everything except layer 8. The ~ operator does this, it inverts a bitmask.
 
 				layerMask = ~layerMask;
 
