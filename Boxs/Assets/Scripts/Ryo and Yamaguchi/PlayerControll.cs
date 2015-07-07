@@ -1,4 +1,14 @@
-﻿/*aho
+﻿/*
+ * 	0703 yamaguchi
+ * 
+ * 　testのため 
+ * 　Application.LoadLevel ("GameOver");
+ * 	を
+ * 　Application.LoadLevel ("stage01");
+ * 
+ * 　へ変更
+*/
+/*aho
  * 0630 yamaguchi count down
  * 
  * 実装
@@ -101,6 +111,9 @@ public class PlayerControll : MonoBehaviour {
 	private PlayerCamera playerCamera;
 	//*************************************************** 0703 kawashima changeGreen finish
 
+	//*************************************************** 0703 yamaguchi DebugTest start
+	public string methodName = "aho";
+
 	void Awake()
 	{
 		downFlg = BLOCK;
@@ -119,7 +132,7 @@ public class PlayerControll : MonoBehaviour {
 		
 		//		fNextMove ();
 		
-		StartCoroutine ("fStart");
+
 		
 		//*************************************************** 0630 yamaguchi dash start
 		speed0 = speed;
@@ -130,6 +143,7 @@ public class PlayerControll : MonoBehaviour {
 		subCamera = GameObject.Find ("SubCamera");
 		playerCamera = subCamera.GetComponent<PlayerCamera> ();
 		//*************************************************** 0703 kawashima changeGreen finish
+		StartCoroutine ("fStart");
 	}
 	
 	// Update is called once per frame
@@ -141,42 +155,45 @@ public class PlayerControll : MonoBehaviour {
 	//*************************************************** 0630 yamaguchi dash start
 	public void setDashFlgON(){
 		this.dashFlg = 1;
-		print ("set dashFlg ON");
+		//print ("set dashFlg ON");
 	}
 	public void setDashFlgOFF(){
 		this.dashFlg = 0;
-		print ("set dashFlg OFF");
+		//print ("set dashFlg OFF");
 	}
 	
 	//*************************************************** 0630 yamaguchi dash finish
 	
 	IEnumerator fStart(){
+
 		//********************************************************************* 0630 yamaguchi count down start
 		cdCanvas = GameObject.Find ("CountDownText");
 		cdText = cdCanvas.GetComponent<Text>();
 		
 		for (int i = 0; i < cnt; i++) {
-			print (i);
+			//print (i);
 			cdText.text = (cnt - i - 1).ToString();
 			//			Text target = cdCanvas.GetComponent<Text>();
-			yield return new WaitForSeconds (1.0f);
+
 			
 			if(startFlg == 1){
-				break;
+				//break;
+			}else{
+				yield return new WaitForSeconds (1.0f);
 			}
 			//ここでカウントダウン用表示
 		}
-		
+
 		fSendCountStart ();
 		
 		cdText.text = "GO";
-		
+	
 		//********************************************************************* 0630 yamaguchi count down finish
 		//*************************************************** 0702 kawashima changeGreen start
 		startcube = GameObject.Find ("StartCube");
 		startcubeanim = startcube.GetComponent<startCubeAnim> ();
 		startcubeanim.fChangeGreen ();
-
+		
 		startbtnObj = GameObject.Find ("ButtonStart");
 		if (startbtnObj != null) {
 			startbtn = startbtnObj.GetComponent<StartBtn> ();
@@ -191,20 +208,27 @@ public class PlayerControll : MonoBehaviour {
 	public void fNextMove()
 	{
 		//*************************************************** 0630 yamaguchi dash start
-		print ("dashFlg check" + dashFlg);
+		//print ("dashFlg check" + dashFlg);
 		if (dashFlg == 1) {
 			this.speed *= 3;
 			dashFlg = 2;
 		} else if (dashFlg == 0) {
 			this.speed = speed0;
 		}
+
+		//*************************************************** 0703 yamaguchi DebugTest start
+
+		StartCoroutine ("testFreeze");
+		print (methodName);
+		//*************************************************** 0703 yamaguchi DebugTest finish
+
 		//*************************************************** 0630 yamaguchi dash finish
 		
-		print ("fNextMove player.position = " + transform.position.x + " , " + transform.position.y + " , " + transform.position.z);
-		print ("floorFlg = " + floorFlg + " downFlg = " + downFlg);
+		//print ("fNextMove player.position = " + transform.position.x + " , " + transform.position.y + " , " + transform.position.z);
+		//print ("floorFlg = " + floorFlg + " downFlg = " + downFlg);
 		
 		if (floorFlg == GOAL) {
-			print ("fGoalPlayer");
+			//print ("fGoalPlayer");
 			StartCoroutine ("fGoalPlayer");
 			//*************************************************** 0703 kawashima changeGreen start
 			radicaltimer.fStopCount();
@@ -214,45 +238,45 @@ public class PlayerControll : MonoBehaviour {
 		
 		//********************************************* 0620 yamaguchi start
 		else if (floorFlg == RIGHT) {
-			print ("fTurnRightPlayer");
+			//print ("fTurnRightPlayer");
 			StartCoroutine ("fTurnRightPlayer");
 			
 			//********************************************* 0620 yamaguchi start
 		} else if (floorFlg == LEFT) {
-			print ("fTurnLeftPlayer");
+			//print ("fTurnLeftPlayer");
 			StartCoroutine ("fTurnLeftPlayer");
 		}
 		//********************************************* 0620 yamaguchi finish
 		
 		else if (frontFlg == BLOCK && upFlg == BLOCK) {
-			print ("fTrouble");
+			//print ("fTrouble");
 			//			fTroublePlayer ();
 			StartCoroutine("fTroublePlayer");
 		}
 		//********************************************* 0620 yamaguchi finish
 		
 		else if (frontFlg == BLOCK) {
-			print ("fClimbPlayer");
+			//print ("fClimbPlayer");
 			StartCoroutine ("fClimbPlayer");
 		}
 		/*		//********************************************* 0620 yamaguchi finish
 		else if (floorFlg == NONE) {
-			print ("fFallPlayer");
+			//print ("fFallPlayer");
 			StartCoroutine("fFallPlayer");
 		}
 */
 		else if (downFlg == NONE) {
-			print ("fDownPlayer");
+			//print ("fDownPlayer");
 			StartCoroutine ("fDownPlayer");
 		}
 		else if (floorFlg == SPLING) {
 			
-			print ("fSpling1Player");
+			//print ("fSpling1Player");
 			StartCoroutine ("fSpling1Player");
 		}
 		else if (frontFlg== NONE)
 		{
-			print ("fWalkPlayer");
+			print ("fWalkPlayer" + transform.position);
 			StartCoroutine ("fWalkPlayer");
 		}
 		
@@ -265,9 +289,14 @@ public class PlayerControll : MonoBehaviour {
 	
 	IEnumerator fWalkPlayer()
 	{
+
+		//*************************************************** 0703 yamaguchi DebugTest start
+		methodName = "fWalkPlayer";
+		//*************************************************** 0703 yamaguchi DebugTest finish
+
 		//GetComponent<Rigidbody> ().useGravity = true;
 		//GetComponent<CapsuleCollider> ().enabled = true;
-		print ("fWalkPlayer" + transform.position.z);
+		//print ("fWalkPlayer" + transform.position.z);
 		
 		
 		for (int i = 0; i < (int)(1.0f / speed); i++)
@@ -279,11 +308,14 @@ public class PlayerControll : MonoBehaviour {
 		
 		//残りの移動
 		transform.Translate (0, 0, 1.0f - (int)(1.0f / speed) * speed);
+
+		print ("test");
+		print(1.0f - (int)(1.0f / speed) * speed);
 		//GetComponent<Rigidbody> ().useGravity = false;
 		//GetComponent<CapsuleCollider> ().enabled = false;
 		
-		//		print ("fWalkPlayer");
-		print ("fWalkPlayer2" + transform.position.z);
+		//		//print ("fWalkPlayer");
+		//print ("fWalkPlayer2" + transform.position.z);
 		fNextMove ();
 		
 	}
@@ -293,10 +325,14 @@ public class PlayerControll : MonoBehaviour {
 	
 	IEnumerator fTurnRightPlayer()
 	{
+		//*************************************************** 0703 yamaguchi DebugTest start
+		methodName = "fTurnRightPlayer";
+		//*************************************************** 0703 yamaguchi DebugTest finish
+
 		transform.Rotate (0, 90, 0);
 		
 		floorFlg = BLOCK;
-		print ("fTurnRightPlayer , " + floorFlg);
+		//print ("fTurnRightPlayer , " + floorFlg);
 		yield return new WaitForSeconds (0.1F);
 		
 		
@@ -309,7 +345,10 @@ public class PlayerControll : MonoBehaviour {
 	
 	IEnumerator fTurnLeftPlayer()
 	{
-		
+		//*************************************************** 0703 yamaguchi DebugTest start
+		methodName = "fTurnLeftPlayer";
+		//*************************************************** 0703 yamaguchi DebugTest finish
+
 		transform.Rotate (0, -90, 0);
 		
 		floorFlg= BLOCK;
@@ -325,15 +364,19 @@ public class PlayerControll : MonoBehaviour {
 	
 	IEnumerator fDownPlayer()
 	{
+		//*************************************************** 0703 yamaguchi DebugTest start
+		methodName = "fDownPlayer";
+		//*************************************************** 0703 yamaguchi DebugTest finish
+
 		anim.SetTrigger ("isJumpTrigger");
 		
 		//		transform.Translate (0, -1, 1);
-		//		print ((int)((1 / speed) * (2.0f/3)));
+		//		//print ((int)((1 / speed) * (2.0f/3)));
 		float dist = 1F;
 		
 		float speed3 = 0.04f;
 		
-		print ("横ジャンプ" + speed3 + " , " + (int)(1.0f / speed3));
+		//print ("横ジャンプ" + speed3 + " , " + (int)(1.0f / speed3));
 		
 		float deltaDistZ = 0;
 		float deltaDistY = 0;
@@ -346,13 +389,13 @@ public class PlayerControll : MonoBehaviour {
 			yield return new WaitForSeconds (0.01F);
 		}
 		
-		print ("downFlg = " + downFlg);
+		//print ("downFlg = " + downFlg);
 		yield return new WaitForSeconds (0.03f);
 		
 		
 		//		if (downFlg == NONE) {
 		//			StartCoroutine("fFallPlayer");
-		//			print ("GAMEOVER");
+		//			//print ("GAMEOVER");
 		//			yield return new WaitForSeconds(10.0f);
 		//		}
 		//		transform.Translate (0, 0, 1.0f - 25.0f*(int)(dist / speed3));
@@ -360,8 +403,8 @@ public class PlayerControll : MonoBehaviour {
 		//yield return new WaitForSeconds (0.1F);
 		
 		
-		print ((int)(dist / speed));
-		print (1.0f - (int)(dist / speed)*speed);
+		//print ((int)(dist / speed));
+		//print (1.0f - (int)(dist / speed)*speed);
 		
 		float xx = transform.position.x;
 		float zz = transform.position.z;
@@ -373,7 +416,7 @@ public class PlayerControll : MonoBehaviour {
 		
 		
 		
-		print ("落下" + speed2 + " , " + (int)(1.0f / speed2));
+		//print ("落下" + speed2 + " , " + (int)(1.0f / speed2));
 		for (int i = 0; i < (int)(1.0f / speed2); i++) {
 			
 			transform.Translate (0, - speed2, speed3/5.0f);
@@ -390,7 +433,7 @@ public class PlayerControll : MonoBehaviour {
 		
 		if (floorFlg != NONE) {
 			yield return new WaitForSeconds (0.5f);
-			print ("deltaDistY = " + deltaDistY);
+			//print ("deltaDistY = " + deltaDistY);
 		}
 		
 		
@@ -412,7 +455,7 @@ public class PlayerControll : MonoBehaviour {
 		*/
 		StartCoroutine ("fFallGameOverChk");
 		/*		
-		print ("横ジャンプ" + speed3 + " , " + (int)(1.0f / speed3));
+		//print ("横ジャンプ" + speed3 + " , " + (int)(1.0f / speed3));
 		
 		//for (int i = 0; i < (int)(dist / speed); i++)
 		for (int i = 0; i < (int)(1.0f / speed3); i++)
@@ -425,14 +468,14 @@ public class PlayerControll : MonoBehaviour {
 		
 		//yield return new WaitForSeconds (5F);
 		
-		print ((int)(dist / speed));
-		print (1.0f - (int)(dist / speed)*speed);
+		//print ((int)(dist / speed));
+		//print (1.0f - (int)(dist / speed)*speed);
 		
 		
 		float speed2 = 0.06F;
 		
 		
-		print ("落下" + speed2 + " , " + (int)(1.0f / speed2));
+		//print ("落下" + speed2 + " , " + (int)(1.0f / speed2));
 		for (int i = 0; i < (int)(1.0f / speed2); i++) {
 			
 			transform.Translate (0, - speed2, 0);
@@ -441,13 +484,13 @@ public class PlayerControll : MonoBehaviour {
 		
 */		
 		yield return new WaitForSeconds (0.5F);
-		print ("downFlg = " + downFlg);
+		//print ("downFlg = " + downFlg);
 		
 		
 		
 		anim.SetTrigger ("isMoveTrigger");
 		
-		print (transform.position.z);
+		//print (transform.position.z);
 		fNextMove ();
 	}
 	
@@ -457,7 +500,11 @@ public class PlayerControll : MonoBehaviour {
 	
 	IEnumerator fClimbPlayer()
 	{
-		print (transform.position.x + " , " + transform.position.y + " , " + transform.position.z);
+		//*************************************************** 0703 yamaguchi DebugTest start
+		methodName = "fClimbPlayer";
+		//*************************************************** 0703 yamaguchi DebugTest finish
+
+		//print (transform.position.x + " , " + transform.position.y + " , " + transform.position.z);
 		
 		
 		
@@ -467,7 +514,7 @@ public class PlayerControll : MonoBehaviour {
 		float dist = 0.2F;
 		
 		float sumDist = 0;
-		print ("speed = " + speed + " , dist = " + dist);
+		//print ("speed = " + speed + " , dist = " + dist);
 		for (int i = 0; i < (int)(dist / speed); i++)
 		{
 			
@@ -476,9 +523,9 @@ public class PlayerControll : MonoBehaviour {
 			yield return new WaitForSeconds (0.01F);
 		}
 		transform.Translate (0, 0,  ( (dist / speed) - (int)( dist / speed)) * speed );
-		print ("speed = " + speed + " , dist = " + dist + " , sumDist = " + sumDist);
+		//print ("speed = " + speed + " , dist = " + dist + " , sumDist = " + sumDist);
 		sumDist += ((dist / speed) - (int)(dist / speed)) * speed;
-		print (((dist / speed) - (int)(dist / speed)) * speed);
+		//print (((dist / speed) - (int)(dist / speed)) * speed);
 		
 		anim.SetTrigger ("isClimbTrigger");
 		yield return new WaitForSeconds (0.5F);
@@ -496,7 +543,7 @@ public class PlayerControll : MonoBehaviour {
 		anim.SetTrigger ("isMoveTrigger");
 		
 		
-		//		print ("count - dist " + (1 - (count * dist)));
+		//		//print ("count - dist " + (1 - (count * dist)));
 		for (int i = 0; i < (int)((1- dist) / speed); i++) {
 			
 			
@@ -509,14 +556,14 @@ public class PlayerControll : MonoBehaviour {
 		
 		transform.Translate (0, 0, ((1 - dist) - ((int)((1 - dist) / speed)) * speed));
 		
-		print ("***speed = " + speed + " , dist = " + dist + " , sumDist = " + sumDist);
+		//print ("***speed = " + speed + " , dist = " + dist + " , sumDist = " + sumDist);
 		sumDist += ((1 - dist) - ((int)((1 - dist) / speed)) * speed) * speed;
-		print (((1 - dist) - ((int)((1 - dist) / speed)) * speed) * speed);
-		print (((1 - dist) - ((int)((1 - dist) / speed)) * speed));
-		print ((1 - dist) + " , - " +  ((int)((1 - dist) / speed)) * speed);
+		//print (((1 - dist) - ((int)((1 - dist) / speed)) * speed) * speed);
+		//print (((1 - dist) - ((int)((1 - dist) / speed)) * speed));
+		//print ((1 - dist) + " , - " +  ((int)((1 - dist) / speed)) * speed);
 		
 		//		transform.Translate (0, 0, Mathf.RoundToInt (transform.position.z) - transform.position.z);
-		print(Mathf.RoundToInt(transform.position.z));
+		//print(Mathf.RoundToInt(transform.position.z));
 		
 		fNextMove ();
 	}
@@ -527,7 +574,10 @@ public class PlayerControll : MonoBehaviour {
 	
 	IEnumerator fTroublePlayer()
 	{
-		
+		//*************************************************** 0703 yamaguchi DebugTest start
+		methodName = "fTroublePlayer";
+		//*************************************************** 0703 yamaguchi DebugTest finish
+
 		//		anim.SetBool ("isTrouble", true);
 		
 		anim.SetBool ("isTrouble", true);
@@ -553,7 +603,7 @@ public class PlayerControll : MonoBehaviour {
 	
 	void fPeePlayer()
 	{
-		print ("失禁");
+		//print ("失禁");
 		
 		Application.LoadLevel ("GameOver");
 	}
@@ -563,7 +613,10 @@ public class PlayerControll : MonoBehaviour {
 	//*******************************************************************
 	IEnumerator fGoalPlayer()
 	{
-		
+		//*************************************************** 0703 yamaguchi DebugTest start
+		methodName = "fGoalPlayer";
+		//*************************************************** 0703 yamaguchi DebugTest finish
+
 		//anim.SetBool ("isMove", false);
 		anim.SetTrigger ("isWinTrigger");
 		yield return new WaitForSeconds (0.01F);
@@ -574,12 +627,15 @@ public class PlayerControll : MonoBehaviour {
 	//
 	//******************************************************************************
 	IEnumerator fSpling1Player(){
-		
+		//*************************************************** 0703 yamaguchi DebugTest start
+		methodName = "fSpling1Player";
+		//*************************************************** 0703 yamaguchi DebugTest finish
+
 		yield return new WaitForSeconds(0.01f);
 		
 		anim.SetTrigger ("isJumpTrigger");
 		//		anim.SetBool ("test",true);
-		print (testCnt);
+		//print (testCnt);
 		testCnt++;
 		
 		int count = (int)(1.0f / 0.02f)-2;
@@ -602,6 +658,10 @@ public class PlayerControll : MonoBehaviour {
 	}
 	
 	IEnumerator fFallPlayer(){
+		//*************************************************** 0703 yamaguchi DebugTest start
+		methodName = "fFallPlayer";
+		//*************************************************** 0703 yamaguchi DebugTest finish
+
 		float t = 0f;
 		float dt = 0.15f;
 		while (t<1.0f) {
@@ -654,7 +714,7 @@ public class PlayerControll : MonoBehaviour {
 	public IEnumerator fAvoidBlock(GameObject objectC)
 	{
 		
-		print ("ヘッドバンド!");
+		//print ("ヘッドバンド!");
 		GetComponent<Animator>().SetTrigger("isHeadButtTrigger");
 		
 		Destroy (objectC);
@@ -662,7 +722,12 @@ public class PlayerControll : MonoBehaviour {
 	}
 	
 	private void fSendCountStart(){
-
-				radicaltimer.fStartCount ();
+		
+		radicaltimer.fStartCount ();
+	}
+	
+	IEnumerator testFreeze(){
+		print ("testFreeze" + transform.position);
+		yield return new WaitForSeconds(1.0f);
 	}
 }

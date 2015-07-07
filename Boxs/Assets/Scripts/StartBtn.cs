@@ -33,7 +33,7 @@ public class StartBtn : MonoBehaviour {
 		retryBtn.SetActive (true);
 		gameObject.SetActive (false);
 		playercontroll.fStartButton ();
-		playercontroll.fNextMove();
+//		playercontroll.fNextMove();
 
 		startcubeanim.fChangeGreen ();
 

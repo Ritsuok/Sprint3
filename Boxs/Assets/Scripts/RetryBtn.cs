@@ -24,5 +24,7 @@ public class RetryBtn : MonoBehaviour {
 	public void fLetsRetry(){
 		startbtnScript.fStartBtnOn ();
 
+		Application.LoadLevel ("stage01");
+
 	}
 }
