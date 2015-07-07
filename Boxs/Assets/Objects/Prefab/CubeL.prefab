@@ -27,9 +27,9 @@ GameObject:
   - 4: {fileID: 480218}
   - 33: {fileID: 3364074}
   - 23: {fileID: 2357776}
-  - 114: {fileID: 11484534}
   - 65: {fileID: 6542308}
   - 54: {fileID: 5405210}
+  - 114: {fileID: 11491900}
   m_Layer: 0
   m_Name: CubeL
   m_TagString: TurnL
@@ -151,7 +151,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 2.00000048, z: 1.99999964}
   m_Center: {x: -5.96046448e-08, y: -1.19209268e-07, z: -2.96461532e-21}
---- !u!114 &11484534
+--- !u!114 &11491900
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

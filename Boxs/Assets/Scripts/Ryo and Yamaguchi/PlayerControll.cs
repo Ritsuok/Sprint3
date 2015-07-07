@@ -50,7 +50,27 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
-public class PlayerControll : MonoBehaviour {
+public class PlayerControll : MonoBehaviour
+{
+	//-----------------------------------0706 igarashi add some field
+	//isSelectHeadButt
+	//isSelectDown
+	//ヘッドバットと後ろに転ぶどうさが、コライダーの判定上、時間差でほぼ同時に起こることがある
+	//どちらか片方が選択されてらどちらか片方は発生しないようにする変数
+	//この変数は毎回fNextMoveが呼ばれるたびに初期化される
+	bool isSelectButt = false;
+	bool isSelectDown = false;
+	//isMoveYaxis
+	//Y軸移動が始まってるかどうかのflag
+	//fclimbPlayerなどでY軸移動がはじまったらもう後ろに転ばさないようにして破壊のみにする
+	//この変数は毎回fNextMoveが呼ばれるたびに初期化される
+	bool isMoveYaxis = false;
+	
+	public GameObject HitEffect;
+	//---------------------------------------------------------------------
+
+
+
 	const int NONE =0;
 	const int BLOCK =1;
 	const int GOAL =2;
@@ -131,7 +151,6 @@ public class PlayerControll : MonoBehaviour {
 	void Start () {
 		
 		//		fNextMove ();
-		
 
 		
 		//*************************************************** 0630 yamaguchi dash start
@@ -207,6 +226,14 @@ public class PlayerControll : MonoBehaviour {
 	//********************************************* 0620 yamaguchi start
 	public void fNextMove()
 	{
+		//-------------------------------------------------igarashi add
+		//初期化
+		isSelectButt = false;
+		isSelectDown = false;
+		isMoveYaxis = false;
+		//-------------------------------------------------igarashi add
+
+
 		//*************************************************** 0630 yamaguchi dash start
 		//print ("dashFlg check" + dashFlg);
 		if (dashFlg == 1) {
@@ -702,24 +729,7 @@ public class PlayerControll : MonoBehaviour {
 		
 	}
 	
-	//-------------------------------------------------0630 method add by igarashi
-	//fAvoidBlock()
-	//ブロックが上から降ってきて、かつ立ち止まることを選択したとき
-	//主人公の座標移動を一時停止させることが必要となる
-	//停止させる場所は、ブロックの中心点でなくてはならないとする
-	//そうするとそのブロック通過後、fNextMoveを呼ぶだけで通常のルーチンに戻れる
-	//落とす予定のブロックより、１ブロック手前の中心点にまだ主人公が到達していない場合
-	//単純に次のフラグ判定のfNextMoveの呼び出しをキャンセルさせれば中心点で足踏みする動作となる
-	//すでに中心点を過ぎている場合は、一度中心点にまで戻ってからfNextMoveの呼び出しをキャンセルする
-	public IEnumerator fAvoidBlock(GameObject objectC)
-	{
-		
-		//print ("ヘッドバンド!");
-		GetComponent<Animator>().SetTrigger("isHeadButtTrigger");
-		
-		Destroy (objectC);
-		yield return new WaitForSeconds (0.01F);
-	}
+
 	
 	private void fSendCountStart(){
 		
@@ -730,4 +740,192 @@ public class PlayerControll : MonoBehaviour {
 		print ("testFreeze" + transform.position);
 		yield return new WaitForSeconds(1.0f);
 	}
+
+
+	//-------------------------------------------------0630 method add by igarashi
+	//fAvoidBlock()
+	
+	public IEnumerator fAvoidBlock(GameObject objectC)
+	{
+		if (isSelectDown == true) yield break;
+		isSelectButt = true;
+		
+		//print ("ヘッドバンド!");
+		GetComponent<Animator>().SetTrigger("isHeadButtTrigger");
+		Instantiate (HitEffect, new Vector3(transform.localPosition.x, transform.localPosition.y + 1.5F, transform.localPosition.z), transform.localRotation);
+		
+		Destroy (objectC);
+		
+		yield return new WaitForSeconds (0.02F);
+		frontFlg = NONE;
+		print ("ここで変えてる");
+	}
+	
+	//-----------------------------------------------------0702 method add by igarashi
+	//fWaitPlayer
+	
+	IEnumerator fWaitPlayer(GameObject objectC)
+	{
+		if (isSelectButt == true) yield break;
+		
+		print ("ここにきてないか");
+		
+		float calcY = transform.localPosition.y ;
+		
+		for (int count = 0; count < 10; count++)
+		{
+			if(calcY > 1) calcY -= 1;
+			else break;
+			print (calcY);
+		}
+		
+		//Y軸移動がはじまってるいる場合
+		if ( calcY < 0.5700F || calcY > 0.57001)
+		{
+			print ("ここか？" + calcY + "    " +  transform.localPosition.y);
+			isMoveYaxis = true;
+			yield break;
+		}
+		
+		float playerPosX = transform.localPosition.x;
+		float playerPosZ = transform.localPosition.z;
+		float blockPosX = objectC.transform.position.x;
+		float blockPosZ = objectC.transform.position.z;
+		
+		const int NORTH = 0;
+		const int EAST = 1;
+		const int SOUTH = 2;
+		const int WEST = 3;
+		
+		int direction = 0;
+		float distanceX = 0;
+		float distanceZ = 0;
+		
+		bool backMove = false;
+		
+		print( "があｇ" + playerPosX + blockPosX );
+		print( "があｇ" + Mathf.RoundToInt(playerPosX) + Mathf.RoundToInt(blockPosX) );
+		
+		//中心点からの移動距離を算出
+		switch ((int)transform.localRotation.y)
+		{
+			
+			
+			
+			//z軸に++で動いてる
+		case 0:
+			if ( Mathf.RoundToInt(playerPosX) == Mathf.RoundToInt(blockPosX) )
+			{
+				
+				float dis = blockPosZ - playerPosZ;
+				print("ここかddd" + dis);
+				print("ここかhhh" + playerPosZ);
+				if ( dis < 1 && isMoveYaxis == false)
+				{
+					print("おかしくね");
+					GetComponent<Animator>().SetTrigger("isDownTrigger");
+					fAllMoveCancel();
+					distanceX = 0;
+					distanceZ = - (1 - dis);
+					backMove = true;
+					
+					isSelectDown = true;
+				}
+			}
+			break;
+			
+			//x軸に++で動いてる
+		case 90:
+			if ( Mathf.RoundToInt(playerPosZ) == Mathf.RoundToInt(blockPosZ) )
+			{
+				float dis = blockPosX - playerPosX;
+				
+				if ( dis < 1 && isMoveYaxis == false)
+				{
+					fAllMoveCancel();
+					distanceX = 1 - dis;
+					distanceZ = 0;
+					backMove = true;
+					
+					isSelectDown = true;
+				}
+			}
+			break;
+			
+			//z軸に--で動いてる
+		case 180:
+			if ( Mathf.RoundToInt(playerPosX) == Mathf.RoundToInt(blockPosX) )
+			{
+				float dis = playerPosZ - blockPosZ;
+				
+				if ( dis < 1 && isMoveYaxis == false)
+				{
+					fAllMoveCancel();
+					distanceX = 0;
+					distanceZ = 1 - dis;;
+					backMove = true;
+					
+					isSelectDown = true;
+				}		
+			}
+			break;
+			
+			//x軸に--で動いてる
+		case 270:
+			if ( Mathf.RoundToInt(playerPosZ) == Mathf.RoundToInt(blockPosZ) )
+			{
+				float dis = playerPosX - blockPosX;
+				
+				if ( dis < 1 && isMoveYaxis == false)
+				{
+					fAllMoveCancel();
+					distanceX = 1 - dis;
+					distanceZ = 0;
+					backMove = true;
+					
+					isSelectDown = true;
+				}
+			}
+			break;
+		}
+		
+		
+		for ( int count = 0; count < 10 ; count ++)
+		{
+			//向き替えたから逆方向に進むよそりゃ
+			transform.Translate(distanceX / 10, 0,  distanceZ / 10);
+			yield return new WaitForSeconds (0.01F);
+		}
+		
+		
+		//起き上がりアニメ修了までしばし待つ
+		yield return new WaitForSeconds (1.5F);
+		//ブロックが落ち切るまでたいき、落ち切ったらfNextMoveを呼ぶ
+		while (true)
+		{
+			if (objectC.GetComponent<RollArrow>().IsGround == true)
+			{
+				fNextMove();
+				break;
+			}
+			yield return new WaitForSeconds (0.01F);
+		}
+		
+	}
+	
+	
+	//-----------------------------------------------------0702 method add by igarashi
+	//fAllMoveCancel
+	
+	void fAllMoveCancel()
+	{
+		StopCoroutine ("fWalkPlayer");
+		StopCoroutine ("fTurnRightPlayer");
+		StopCoroutine ("fTurnLeftPlayer");
+		StopCoroutine ("fTurnDownPlayer");
+		StopCoroutine ("fClimbPlayer");
+		StopCoroutine ("fDownPlayer");
+	}
+	//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 }

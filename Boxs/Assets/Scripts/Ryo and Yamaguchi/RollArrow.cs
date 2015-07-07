@@ -5,11 +5,16 @@ public class RollArrow : MonoBehaviour {
 	float rollSpeed = 5;
 	public GameObject turnCanvas;
 	GameObject clone;
-	
+
+	//-------------------------------------------------igarashi add
+	bool isGround = false;
+	public bool IsGround { get { return isGround; } }
+	//---------------------------------------------------------------
+
 	// Use this for initialization
 	void Start ()
 	{
-		StartCoroutine ("fFlagAvoid");
+		StartCoroutine ("fBlockIsOnGroundFlag");
 		
 		if (gameObject.tag == "TurnL")
 		{
@@ -67,93 +72,97 @@ public class RollArrow : MonoBehaviour {
 		}
 	}
 	
-	//********************************************* 0629 igarashi start
+	//-------------------------------------------------------------0702 method change by igarashi
+	//fBombObject
+	
 	IEnumerator fBombObject()
 	{
+		print ("来てる");
+		
 		Collider collider;
+		
+		float prePos;
+		float nowPos;
 		
 		while (true)
 		{
+			prePos = transform.localPosition.y;
+			yield return new WaitForSeconds (0.03F);
+			nowPos = transform.localPosition.y;
 			
-			if ((transform.localPosition.y % 1) >= 0.999F)
-			{
-				
+			if ((prePos -nowPos) < 0.01F) {
 				Collider[] c = Physics.OverlapSphere (new Vector3 (transform.localPosition.x,
 				                                                   transform.localPosition.y - 1,
 				                                                   transform.localPosition.z), 0.1F);
-				if (c [0] != null)
-				{
-					collider = c [0];
-					break;
-				}
+				collider = c[0];
+				break;
 			}
-			yield return new WaitForSeconds (0.01F);
 		}
 		
 		//sound
 		Sounds.SEbomb ();
 		
-		Destroy (collider.gameObject);
-		Destroy (gameObject);
+		if (collider.gameObject.tag == "Block" ||
+		    collider.gameObject.tag == "Bomb" ||
+		    collider.gameObject.tag == "TurnR" ||
+		    collider.gameObject.tag == "TurnL")
+		{
+			Destroy (collider.gameObject);
+			Destroy (gameObject);
+		}
 	}
-	//********************************************* 0629 igarashi end
 	
-	//--------------------------------------------------------------------0630 method add by igarashi
+	//--------------------------------------------------------------------0702 method change by igarashi
 	//fFlagAvoid()
-	//ブロックが上から降ってきた時のフラグ判定、とりあえず、その場で立ち止まるか
-	//もしくは通常のmoveを実行し続けるだけの判定
-	//ダッシュやスライディング、ブロック破壊は後回し予定
-	IEnumerator fFlagAvoid()
+	//ブロックがおりきったときの判定
+	IEnumerator fBlockIsOnGroundFlag ()
 	{
-		
-		//print ("はははははは");
-		
-		bool searchFine = false;
+		float prePos;
+		float nowPos;
 		
 		while (true)
 		{
+			//if (searchForAvoid == true) break;
 			
-			//落下ブロックの座標を中心に半径１の球体センサーを作る
-			Collider[] c = Physics.OverlapSphere (new Vector3 (transform.localPosition.x,
-			                                                   transform.localPosition.y,
-			                                                   transform.localPosition.z), 1F);
-			foreach (var item in c)
-			{
-				//print ("くそおおお" + item.tag);
-				if (item.tag == "SensorForAvoidBlock")
-				{	
-					//print ("どうどう");
-					
-					//PlayerControllスクリプトのfAvoid
-					item.gameObject.GetComponentInParent<PlayerControll> ().StartCoroutine("fAvoidBlock", gameObject);
-					searchFine = true;
-					break;
-				}
-			}
-			
-			
-			
-			if (searchFine == true) break;
-			
-			if ((transform.localPosition.y % 1) >= 0.999F)
-			{
-				//落下ブロック座標よりｙ軸に-1に極小のセンサーを作る
-				//ちな、この c2 は範囲と発生場所的に上の c より先に他コライダーと接触することはない（はず）
-				bool endFlag = Physics.CheckSphere (new Vector3 (transform.localPosition.x,
-				                                                 transform.localPosition.y - 1,
-				                                                 transform.localPosition.z), 0.1F);
-				//上記コライダーが何かブロック接触していない場合、このwhile文を抜け出し
-				//fFlagAvoid()を終了する
-				if (endFlag == true)
-				{
-					//print ("終わりだぜ");
-					break;
-				}
-			}
-			
+			prePos = transform.localPosition.y;
 			yield return new WaitForSeconds (0.01F);
+			nowPos = transform.localPosition.y;
 			
+			if ((prePos -nowPos) < 0.01F)
+			{
+				bool onGround = Physics.CheckSphere (new Vector3 (transform.localPosition.x,
+				                                                  transform.localPosition.y - 1,
+				                                                  transform.localPosition.z), 0.1F);
+				if (onGround == true)
+				{
+					print ("設置完了");
+					isGround = true;
+					break;
+				}
+			}
 		}
 		
 	} // end fFlagAvoid()
+	
+	void OnTriggerEnter(Collider c)
+	{
+		print ("ここにはきてるか");
+		if (c.tag == "SensorForAvoidBlock")	
+		{
+			print ("こらあstep3");
+			
+			//PlayerControllスクリプトのfAvoid
+			c.gameObject.GetComponentInParent<PlayerControll> ().StartCoroutine("fAvoidBlock", gameObject);
+			//searchForAvoid = true;
+		}
+		
+		
+		if (c.tag == "SensorFrontUP")
+		{
+			print ("こここここらあstep3");
+			
+			c.gameObject.GetComponentInParent<PlayerControll> ().StartCoroutine("fWaitPlayer", gameObject);
+		}
+		
+	}
 }

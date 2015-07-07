@@ -10,9 +10,9 @@ GameObject:
   - 4: {fileID: 408506}
   - 33: {fileID: 3354358}
   - 23: {fileID: 2393884}
-  - 114: {fileID: 11453104}
   - 65: {fileID: 6540566}
   - 54: {fileID: 5473088}
+  - 114: {fileID: 11479940}
   m_Layer: 0
   m_Name: CubeR
   m_TagString: TurnR
@@ -151,7 +151,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 2.00000048, z: 1.99999964}
   m_Center: {x: -5.96046448e-08, y: -1.19209268e-07, z: -2.96461532e-21}
---- !u!114 &11453104
+--- !u!114 &11479940
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
