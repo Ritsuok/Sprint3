@@ -818,6 +818,7 @@ public class PlayerControll : MonoBehaviour
 			{
 				
 				float dis = blockPosZ - playerPosZ;
+				print ("Pos" + blockPosZ + "   " + playerPosZ);
 				print("ここかddd" + dis);
 				print("ここかhhh" + playerPosZ);
 				if ( dis < 1 && isMoveYaxis == false)
