@@ -7,7 +7,7 @@ public class DashBtn : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		playerObj = GameObject.Find("Boxs2nd1");
+		playerObj = GameObject.Find("Boxs2nd2");
 		playercontroll = playerObj.GetComponent<PlayerControll>();
 		
 		

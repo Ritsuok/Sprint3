@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 	0703 yamaguchi
  * 
  * 　testのため 
@@ -265,15 +265,16 @@ public class PlayerControll : MonoBehaviour {
 			StartCoroutine("fFallPlayer");
 		}
 */
+		else if (floorFlg == SPLING) {
+			
+			print ("fSpling1Player");
+			StartCoroutine ("fSpling1Player");
+		}
 		else if (downFlg == NONE) {
 			//print ("fDownPlayer");
 			StartCoroutine ("fDownPlayer");
 		}
-		else if (floorFlg == SPLING) {
-			
-			//print ("fSpling1Player");
-			StartCoroutine ("fSpling1Player");
-		}
+
 		else if (frontFlg== NONE)
 		{
 			print ("fWalkPlayer" + transform.position);
@@ -632,18 +633,46 @@ public class PlayerControll : MonoBehaviour {
 		//*************************************************** 0703 yamaguchi DebugTest finish
 
 		yield return new WaitForSeconds(0.01f);
-		
+		print ("fSpling1Player");
+		Vector3 splingPos = transform.position;
+
 		anim.SetTrigger ("isJumpTrigger");
 		//		anim.SetBool ("test",true);
 		//print (testCnt);
 		testCnt++;
 		
 		int count = (int)(1.0f / 0.02f)-2;
-		for (int i = 0; i < count; i++) {
+		for (int i = 0; i < count / 2; i++) {
 			yield return new WaitForSeconds(0.01f);
 			transform.Translate(0,0,2.0f/count);
 		}
-		
+
+		yield return new WaitForSeconds (0.01f);
+		if (frontFlg == 1) {
+			print ("test");
+			yield return new WaitForSeconds(0.01f);
+
+			print ("isCollapseTrigger");
+			anim.SetTrigger("isCollapseTrigger");
+			for (int i = 0; i < count / 5; i++) {			//TODO playerのspeedによって変化の可能性あり
+
+				yield return new WaitForSeconds (0.01f);
+				transform.Translate (0, 0, 2.0f / count);
+			}
+			for (int i = 0; i < count / 5; i++) {			//TODO playerのspeedによって変化の可能性あり
+				yield return new WaitForSeconds (0.01f);
+				transform.Translate (0, 0, -2.0f / count);
+			}
+
+			if(floorFlg == 0){
+				StartCoroutine("fFallPlayer");
+			}
+		}else{
+			for (int i = 0; i < count / 2; i++) {
+				yield return new WaitForSeconds (0.01f);
+				transform.Translate (0, 0, 2.0f / count);
+			}
+		}
 		yield return new WaitForSeconds (0.01f);
 		if (floorFlg == NONE) {
 			StartCoroutine("fFallGameOverChk");
@@ -653,7 +682,9 @@ public class PlayerControll : MonoBehaviour {
 		
 		//		floorFlg = BLOCK;
 		//		anim.SetTrigger ("isMoveTrigger");
-		
+
+//		transform.position = splingPos;
+
 		fNextMove ();
 	}
 	
